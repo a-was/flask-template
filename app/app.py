@@ -36,7 +36,6 @@ def init_main_routes(application):
     from flask import g, request
 
     from .extensions import log
-    from . import db
 
     def get_ip(req):
         ip = req.headers.getlist('X-Forwarded-For')
@@ -45,12 +44,6 @@ def init_main_routes(application):
         else:
             ip = req.remote_addr
         return ip
-
-    @application.before_first_request
-    def before_first_request():
-        if application.config['EXEC_SQL']:
-            for file in application.config['SQL_FILES']:
-                db.exec_sql_file(file)
 
     @application.before_request
     def before_request():
